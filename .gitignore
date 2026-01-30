@@ -2,9 +2,12 @@
 terraform.tfstate
 terraform.tfstate.*
 *.tfstate
-*.tfstate.*
+*.tfstate.backup
 
-# Terraform variables files
-variables.tf
+# Terraform vars
+terraform.tfvars
 *.tfvars
-*.tfvars.json
+
+# Terraform directories and lock
+.terraform/
+.terraform.lock.hcl
