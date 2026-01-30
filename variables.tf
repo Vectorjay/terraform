@@ -1,11 +1,6 @@
-variable "cidr_blocks" {
-  description = "subnet cidr block"
-  type = list (object({
-    cidr_blocks = string
-    name = string
-  }))
-}
-
+variable "vpc_cidr_block" {}
+variable "subnet_cidr_block" {}
+variable "env_prefix" {}
 variable "availability_zone" {
   description = "availability zone"
 }
