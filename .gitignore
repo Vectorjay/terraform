@@ -1,3 +1,10 @@
-.variables.tf
-.terraform.tfstate
-.terraform.tfvars
+# Terraform state files
+terraform.tfstate
+terraform.tfstate.*
+*.tfstate
+*.tfstate.*
+
+# Terraform variables files
+variables.tf
+*.tfvars
+*.tfvars.json
