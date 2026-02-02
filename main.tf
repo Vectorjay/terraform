@@ -103,23 +103,7 @@ resource "aws_instance" "myapp-server" {
   associate_public_ip_address = true
   key_name = aws_key_pair.ssh-key.key_name
 
-  user_data = <<-EOF
-              #!/bin/bash
-              # Update and install docker on Ubuntu
-              apt-get update -y
-              apt-get install -y docker.io
-              
-              # Start and enable docker
-              systemctl start docker
-              systemctl enable docker
-              
-              # Run nginx with correct port mapping
-              docker run -d \
-                -p 8080:80 \
-                --name nginx \
-                --restart unless-stopped \
-                nginx:latest
-              EOF
+  user_data = file("entry-script.sh")
 
   tags = {
     Name = "${var.env_prefix}-server"
