@@ -5,3 +5,4 @@ variable  my_ip {}
 variable  instance_type {} 
 variable  availability_zone {}
 variable public_key_location {}
+variable private_key_location {}
