@@ -1,9 +1,11 @@
 variable  vpc_cidr_block {}
-variable  subnet_cidr_block {}
-variable  env_prefix {}
-variable  my_ip {}
-variable  instance_type {} 
-variable  availability_zone {}
-variable public_key_location {}
-variable private_key_location {}
-variable image_name {}
+variable  private_subnet_cidr_blocks {}
+variable  public_subnet_cidr_blocks {}
+variable  region {}
+variable  ami_type {}
+variable  instance_types {}
+variable  cluster_name  {}
+variable  cluster_version {}
+
+
+
