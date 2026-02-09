@@ -89,6 +89,8 @@ resource "aws_instance" "myapp-server-small" {
   associate_public_ip_address = true
   key_name = aws_key_pair.ssh-key.key_name
 
+  user_data = file ("app_server_setup.sh")
+
   tags = {
     Name = "${var.env_prefix}-server-small"
   }
