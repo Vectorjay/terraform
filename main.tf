@@ -56,10 +56,6 @@ resource "aws_key_pair" "ssh-key" {
     public_key = file(var.public_key_location)
 }
 
-output "ec2_public_ip" {
-    value = aws_instance.myapp-server.public_ip
-}
-
 resource "aws_instance" "myapp-server" {
   ami           = data.aws_ami.latest-ubuntu.id
   instance_type = var.instance_type
@@ -78,20 +74,3 @@ resource "aws_instance" "myapp-server" {
   }
 }
 
-resource "aws_instance" "myapp-server-small" {
-  ami           = data.aws_ami.latest-ubuntu.id
-  instance_type = var.instance_type_small
-
-  subnet_id = aws_subnet.myapp-subnet-1.id
-  vpc_security_group_ids = [aws_security_group.app-server-sg.id]
-  availability_zone = var.availability_zone
-
-  associate_public_ip_address = true
-  key_name = aws_key_pair.ssh-key.key_name
-
-  user_data = file ("app_server_setup.sh")
-
-  tags = {
-    Name = "${var.env_prefix}-server-small"
-  }
-}
