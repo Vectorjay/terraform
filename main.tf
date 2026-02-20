@@ -1,3 +1,13 @@
+terraform {
+  required_version = ">= 0.12"
+  backend "s3" {
+    bucket = "myapp-bucket-jay"
+    key = "myapp/state.tfstate"
+    region = var.region
+  }
+  
+}
+
 provider "aws"{}
 
 resource "aws_vpc" "myapp_vpc"{
