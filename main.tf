@@ -2,27 +2,16 @@ provider "aws"{}
 
 resource "aws_vpc" "myapp_vpc"{
     cidr_block = var.vpc_cidr_block
-    tags = {
-        Name: "${var.env_prefix}-vpc"
-    }
 }
 
 resource "aws_subnet" "myapp-subnet-1" {
   vpc_id     = aws_vpc.myapp_vpc.id
   cidr_block = var.subnet_cidr_block
   availability_zone = var.availability_zone
-  tags = {
-        Name: "${var.env_prefix}-subnet-1"
-    }
 }
 
 resource "aws_internet_gateway" "myapp-igw"{
     vpc_id = aws_vpc.myapp_vpc.id
-
-    tags = {
-        Name: "${var.env_prefix}-igw"
-    }
-
 }
 
 resource "aws_default_route_table" "main-rtb"{
@@ -30,9 +19,6 @@ resource "aws_default_route_table" "main-rtb"{
     route {
         cidr_block = "0.0.0.0/0"
         gateway_id = aws_internet_gateway.myapp-igw.id
-    }
-    tags = {
-        Name: "${var.env_prefix}-main-rtb"
     }
 }
 
@@ -52,16 +38,14 @@ data "aws_ami" "latest-ubuntu" {
 }
 
 resource "aws_key_pair" "ssh-key" {
-    key_name = "jenkins-key"
+    key_name = "ec2-key"
     public_key = file(var.public_key_location)
 }
 
-output "ec2_public_ip" {
-    value = aws_instance.myapp-server.public_ip
-}
 
-resource "aws_instance" "myapp-server" {
+resource "aws_instance" "demo" {
   ami           = data.aws_ami.latest-ubuntu.id
+  count = 3
   instance_type = var.instance_type
 
   subnet_id = aws_subnet.myapp-subnet-1.id
@@ -71,27 +55,5 @@ resource "aws_instance" "myapp-server" {
   associate_public_ip_address = true
   key_name = aws_key_pair.ssh-key.key_name
 
-  user_data = file("jenkins_setup.sh")
-
-  tags = {
-    Name = "${var.env_prefix}-server"
-  }
 }
 
-resource "aws_instance" "myapp-server-small" {
-  ami           = data.aws_ami.latest-ubuntu.id
-  instance_type = var.instance_type_small
-
-  subnet_id = aws_subnet.myapp-subnet-1.id
-  vpc_security_group_ids = [aws_security_group.app-server-sg.id]
-  availability_zone = var.availability_zone
-
-  associate_public_ip_address = true
-  key_name = aws_key_pair.ssh-key.key_name
-
-  user_data = file ("app_server_setup.sh")
-
-  tags = {
-    Name = "${var.env_prefix}-server-small"
-  }
-}
