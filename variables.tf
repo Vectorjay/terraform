@@ -5,3 +5,4 @@ variable  instance_type {}
 variable  availability_zone {}
 variable  public_key_location {}
 variable  image_name {}
+variable  env-prefix {}

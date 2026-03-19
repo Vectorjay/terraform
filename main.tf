@@ -8,10 +8,18 @@ resource "aws_subnet" "myapp-subnet-1" {
   vpc_id     = aws_vpc.myapp_vpc.id
   cidr_block = var.subnet_cidr_block
   availability_zone = var.availability_zone
+
+  tags = {
+    Name = "${var.env-prefix}-subnet-1"
+  }
 }
 
 resource "aws_internet_gateway" "myapp-igw"{
     vpc_id = aws_vpc.myapp_vpc.id
+
+    tags = {
+        Name = "${var.env-prefix}-igw"
+    }
 }
 
 resource "aws_default_route_table" "main-rtb"{
@@ -54,6 +62,10 @@ resource "aws_instance" "demo" {
 
   associate_public_ip_address = true
   key_name = aws_key_pair.ssh-key.key_name
+
+  tags = {
+    Name = "${var.env-prefix}-instance-${count.index + 1}"
+  }
 
 }
 
