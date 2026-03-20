@@ -63,14 +63,14 @@ resource "aws_instance" "demo" {
   associate_public_ip_address = true
   key_name = aws_key_pair.ssh-key.key_name
 
-  root_block_device {
-    volume_size = 8
+  # root_block_device {
+  #   volume_size = 8
 
-    tags = {
-      Name        = "${var.instance_names[count.index]}"
-      Environment = var.instance_names[count.index]
-    }
-  }
+  #   tags = {
+  #     Name        = "${var.instance_names[count.index]}"
+  #     Environment = var.instance_names[count.index]
+  #   }
+  # }
 
   tags = {
     Name = "${var.instance_names[count.index]}"
