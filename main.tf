@@ -2,6 +2,8 @@ provider "aws"{}
 
 resource "aws_vpc" "myapp_vpc"{
     cidr_block = var.vpc_cidr_block
+    enable_dns_support   = true   # ✅ enables DNS resolution
+    enable_dns_hostnames = true   # ✅ enables public DNS hostnames
 }
 
 resource "aws_subnet" "myapp-subnet-1" {
@@ -62,6 +64,8 @@ resource "aws_instance" "demo" {
 
   associate_public_ip_address = true
   key_name = aws_key_pair.ssh-key.key_name
+
+  user_data = file("nginx_setup.sh")
 
   # root_block_device {
   #   volume_size = 8
