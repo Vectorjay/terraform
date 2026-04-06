@@ -75,11 +75,6 @@ resource "aws_instance" "demo" {
   #     Environment = var.instance_names[count.index]
   #   }
   # }
-  # This command will run after the instance is created, it will use Ansible to deploy Docker on the instance. Make sure to have Ansible installed and configured on your local machine.
-  provisioner "local-exec" {
-    working_dir = "/Users/mac/Ansible"
-    command = "ansible-playbook --inventory ${self.public_ip}, --private-key ${var.ssh_key_private} --user ubuntu deploy-docker.yaml"
-  }
 
   tags = {
     Name = "${var.instance_names[count.index]}"
@@ -87,4 +82,11 @@ resource "aws_instance" "demo" {
 
 }
 
+resource "null_resource" "Configure_server"{
+  # This command will run after the instance is created, it will use Ansible to deploy Docker on the instance. Make sure to have Ansible installed and configured on your local machine.
+  provisioner "local-exec" {
+    working_dir = "../Ansible"
+    command = "ansible-playbook --inventory ${aws_instance.demo[0].public_ip}, --private-key ${var.ssh_key_private} --user ubuntu deploy-node.yaml"
+  }
+}
 
