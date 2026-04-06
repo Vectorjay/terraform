@@ -65,7 +65,7 @@ resource "aws_instance" "demo" {
   associate_public_ip_address = true
   key_name = aws_key_pair.ssh-key.key_name
 
-  user_data = file("nginx_setup.sh")
+  # user_data = file("nginx_setup.sh")
 
   # root_block_device {
   #   volume_size = 8
@@ -75,6 +75,11 @@ resource "aws_instance" "demo" {
   #     Environment = var.instance_names[count.index]
   #   }
   # }
+  # This command will run after the instance is created, it will use Ansible to deploy Docker on the instance. Make sure to have Ansible installed and configured on your local machine.
+  provisioner "local-exec" {
+    working_dir = "/Users/mac/Ansible"
+    command = "ansible-playbook --inventory ${self.public_ip}, --private-key ${var.ssh_key_private} --user ubuntu deploy-docker.yaml"
+  }
 
   tags = {
     Name = "${var.instance_names[count.index]}"
